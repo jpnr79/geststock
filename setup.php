@@ -87,7 +87,7 @@ function plugin_version_geststock() {
            'page'           => "/front/reservation.php",
            'minGlpiVersion' => '10.0.3',
            'requirements'   => ['glpi' => ['min' => '10.0.3',
-                                           'max' => '11.0.0']]];
+                                           'max' => '12.0.0']]];
 }
 
 
