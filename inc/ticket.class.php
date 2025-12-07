@@ -65,7 +65,7 @@ class PluginGeststockTicket {
             $req = $DB->request("glpi_plugin_geststock_reservations_items",
                                 ['plugin_geststock_reservations_id' => $resa['id']]);
 
-            if ($req->count())) {
+            if ($req->count()) {
                foreach ($DB->request("glpi_plugin_geststock_reservations_items",
                                      ['plugin_geststock_reservations_id' => $resa['id']]) as $resait) {
                   $resaitid = $resait['id'];
