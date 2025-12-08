@@ -41,17 +41,3 @@ function plugin_geststock_uninstall()
    return true;
 }
 
-/**
- * Get the plugin version.
- *
- * @return array
- */
-function plugin_version_geststock()
-{
-    return [
-        'version'      => '1.0.0', // Set your plugin's version
-        'requirements' => [
-            'glpi' => ['min' => '11.0'], // Set compatibility
-        ],
-    ];
-}

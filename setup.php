@@ -85,9 +85,8 @@ function plugin_version_geststock() {
            'license'        => 'GPLv3+',
            'homepage'       => 'https://github.com/yllen/geststock',
            'page'           => "/front/reservation.php",
-           'minGlpiVersion' => '10.0.3',
-           'requirements'   => ['glpi' => ['min' => '10.0.3',
-                                           'max' => '12.0.0']]];
+           'requirements'   => ['glpi' => ['min' => '11.0',
+                                           'max' => '12.0']]];
 }
 
 
