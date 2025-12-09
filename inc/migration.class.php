@@ -4,17 +4,17 @@ if (!defined('GLPI_ROOT')) {
     die('Sorry. You can\'t access this file directly');
 }
 
-class PluginGeststockMigration extends \Glpi\Toolbox\PluginMigration
+class PluginGeststockMigration
 {
+    private $db;
+
     /**
      * @param bool $do_db_checks
      */
     public function __construct($do_db_checks = true)
     {
-        // Overload the constructor to allow instantiation without DB connection for uninstall.
-        if ($do_db_checks) {
-            parent::__construct();
-        }
+        global $DB;
+        $this->db = $DB;
     }
 
     public static function getMigrationSteps(): array
@@ -35,10 +35,11 @@ class PluginGeststockMigration extends \Glpi\Toolbox\PluginMigration
         // Example:
         // $table_name = 'glpi_plugin_geststock_example';
         // if (!$this->db->tableExists($table_name)) {
-        //    $this->db->createTable(
-        //        $table_name,
-        //        "`id` INT(11) NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`)"
-        //    );
+        //    $query = "CREATE TABLE `" . $table_name . "` (
+        //        `id` INT(11) NOT NULL AUTO_INCREMENT,
+        //        PRIMARY KEY (`id`)
+        //    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+        //    $this->db->doQuery($query);
         // }
     }
 
@@ -47,16 +48,14 @@ class PluginGeststockMigration extends \Glpi\Toolbox\PluginMigration
      */
     public function uninstall(): void
     {
-        global $DB; // Get DB connection for uninstall.
-
         $tables = [
             // 'glpi_plugin_geststock_example',
             // Add all your plugin's table names here.
         ];
 
         foreach ($tables as $table) {
-            if ($DB->tableExists($table)) {
-                $DB->dropTable($table);
+            if ($this->db->tableExists($table)) {
+                $this->db->doQuery("DROP TABLE IF EXISTS `" . $table . "`");
             }
         }
     }

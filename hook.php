@@ -16,14 +16,23 @@ if (!function_exists('plugin_init_geststock')) {
  */
 function plugin_geststock_install()
 {
-   // Ensure the core PluginMigration class is loaded.
-   if (!class_exists(PluginMigration::class)) {
+   try {
+      include_once __DIR__ . '/inc/migration.class.php';
+      $migration = new PluginGeststockMigration(true);
+      
+      // Execute migration steps
+      $steps = PluginGeststockMigration::getMigrationSteps();
+      foreach ($steps as $version => $method) {
+          if (method_exists($migration, $method)) {
+              $migration->$method();
+          }
+      }
+      
+      return true;
+   } catch (Exception $e) {
+      error_log("Geststock install error: " . $e->getMessage());
       return false;
    }
-
-   include_once __DIR__ . '/inc/migration.class.php';
-   PluginMigration::makeMigration('geststock', PluginGeststockMigration::class);
-   return true;
 }
 
 /**
