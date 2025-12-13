@@ -1,0 +1,217 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Instantiated class ITILFollowup not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: front/reservation.form.php
+
+		-
+			message: '#^Call to an undefined static method Session\:\:checkRightsOr\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: front/reservation_item.form.php
+
+		-
+			message: '#^Function importArrayFromDB not found\.$#'
+			identifier: function.notFound
+			count: 2
+			path: front/reservation_item.form.php
+
+		-
+			message: '#^Call to static method dropdown\(\) on an unknown class State\.$#'
+			identifier: class.notFound
+			count: 2
+			path: inc/config.class.php
+
+		-
+			message: '#^Class Html referenced with incorrect case\: HTML\.$#'
+			identifier: class.nameCase
+			count: 1
+			path: inc/config.class.php
+
+		-
+			message: '#^Static call to instance method CommonDBTM\:\:showMassiveActionsSubForm\(\)\.$#'
+			identifier: method.staticCall
+			count: 1
+			path: inc/followup.class.php
+
+		-
+			message: '#^Call to an undefined static method Html\:\:displayTitle\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: inc/gestion.class.php
+
+		-
+			message: '#^Instantiated class Computer not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: inc/gestion.class.php
+
+		-
+			message: '#^Instantiated class Monitor not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: inc/gestion.class.php
+
+		-
+			message: '#^Instantiated class NetworkEquipment not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: inc/gestion.class.php
+
+		-
+			message: '#^Instantiated class Peripheral not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: inc/gestion.class.php
+
+		-
+			message: '#^Instantiated class Phone not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: inc/gestion.class.php
+
+		-
+			message: '#^Instantiated class Printer not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: inc/gestion.class.php
+
+		-
+			message: '#^Access to undefined constant Ticket\:\:DEMAND_TYPE\.$#'
+			identifier: classConstant.notFound
+			count: 2
+			path: inc/reservation.class.php
+
+		-
+			message: '#^Call to an undefined static method Dropdown\:\:showNumber\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: inc/reservation.class.php
+
+		-
+			message: '#^Call to an undefined static method Html\:\:showDateField\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: inc/reservation.class.php
+
+		-
+			message: '#^Call to an undefined static method Html\:\:textarea\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: inc/reservation.class.php
+
+		-
+			message: '#^Call to an undefined static method Toolbox\:\:stripTags\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: inc/reservation.class.php
+
+		-
+			message: '#^Call to static method getUserEntities\(\) on an unknown class Profile_User\.$#'
+			identifier: class.notFound
+			count: 1
+			path: inc/reservation.class.php
+
+		-
+			message: '#^Function importArrayFromDB not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: inc/reservation.class.php
+
+		-
+			message: '#^Instantiated class ITILFollowup not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: inc/reservation.class.php
+
+		-
+			message: '#^Undefined variable\: \$date$#'
+			identifier: variable.undefined
+			count: 1
+			path: inc/reservation.class.php
+
+		-
+			message: '#^Access to undefined constant PluginGeststockReservation_Item\:\:HAVE_VIEW_RIGHT_ON_ITEM\.$#'
+			identifier: classConstant.notFound
+			count: 1
+			path: inc/reservation_item.class.php
+
+		-
+			message: '#^Call to an undefined static method Html\:\:convDate\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: inc/reservation_item.class.php
+
+		-
+			message: '#^Function importArrayFromDB not found\.$#'
+			identifier: function.notFound
+			count: 6
+			path: inc/reservation_item.class.php
+
+		-
+			message: '#^Parameter \$pdf of method PluginGeststockReservation_Item\:\:pdfForReservation\(\) has invalid type PluginPdfSimplePDF\.$#'
+			identifier: class.notFound
+			count: 1
+			path: inc/reservation_item.class.php
+
+		-
+			message: '#^Static call to instance method CommonDBTM\:\:showMassiveActionsSubForm\(\)\.$#'
+			identifier: method.staticCall
+			count: 1
+			path: inc/reservation_item.class.php
+
+		-
+			message: '#^Undefined variable\: \$status$#'
+			identifier: variable.undefined
+			count: 1
+			path: inc/reservation_item.class.php
+
+		-
+			message: '#^Access to undefined constant PluginGeststockReservation_Item_Number\:\:HAVE_VIEW_RIGHT_ON_ITEM\.$#'
+			identifier: classConstant.notFound
+			count: 1
+			path: inc/reservation_item_number.class.php
+
+		-
+			message: '#^Function exportArrayToDB not found\.$#'
+			identifier: function.notFound
+			count: 2
+			path: inc/reservation_item_number.class.php
+
+		-
+			message: '#^Access to an undefined property PluginGeststockReservationPDF\:\:\$obj\.$#'
+			identifier: property.notFound
+			count: 1
+			path: inc/reservationpdf.class.php
+
+		-
+			message: '#^Deprecated in PHP 8\.4\: Parameter \#1 \$obj \(CommonGLPI\) is implicitly nullable via default value null\.$#'
+			identifier: parameter.implicitlyNullable
+			count: 1
+			path: inc/reservationpdf.class.php
+
+		-
+			message: '#^Parameter \$pdf of method PluginGeststockReservationPDF\:\:displayTabContentForPDF\(\) has invalid type PluginPdfSimplePDF\.$#'
+			identifier: class.notFound
+			count: 1
+			path: inc/reservationpdf.class.php
+
+		-
+			message: '#^PluginGeststockReservationPDF\:\:defineAllTabsPDF\(\) calls parent\:\:defineAllTabs\(\) but PluginGeststockReservationPDF does not extend any class\.$#'
+			identifier: class.noParent
+			count: 1
+			path: inc/reservationpdf.class.php
+
+		-
+			message: '#^Access to undefined constant CommonITILObject\:\:CLOSED\.$#'
+			identifier: classConstant.notFound
+			count: 2
+			path: inc/ticket.class.php
+
+		-
+			message: '#^Function importArrayFromDB not found\.$#'
+			identifier: function.notFound
+			count: 1
+			path: inc/ticket.class.php
