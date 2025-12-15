@@ -79,7 +79,7 @@ class PluginGeststockFollowup extends CommonDBTM {
          case 'movenext' :
             $config = new PluginGeststockConfig();
             $config->getFromDB(1);
-            $entity = $config->fields['entities_id_stock'];
+            $entity = $config->fields['entities_id_stock'] ?? '';
             Location::dropdown(['entity'   => $entity,
                                 'addicon'  => false,
                                 'comments' => false]);

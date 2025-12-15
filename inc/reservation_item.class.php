@@ -76,7 +76,7 @@ class PluginGeststockReservation_Item extends CommonDBChild {
                              'models_id'          => $model,
                              'locations_id_stock' => $location]) as $data) {
          $resa->getFromDB($data['plugin_geststock_reservations_id']);
-         if ($resa->fields['status'] < 3) { //asked of waiting
+         if ($resa->fields['status'] ?? '' < 3) { //asked of waiting
             $reserv += $data['nbrereserv'];
          }
       }
@@ -100,8 +100,8 @@ class PluginGeststockReservation_Item extends CommonDBChild {
                                          'is_template'  => 0,
                                          'entities_id'  => $entity,
                                          'locations_id' => $location,
-                                         'states_id'    => [$config->fields['stock_status'],
-                                                            $config->fields['transit_status']]]);
+                                         'states_id'    => [$config->fields['stock_status'] ?? '',
+                                                            $config->fields['transit_status'] ?? '']]);
    }
 
 
@@ -122,7 +122,7 @@ class PluginGeststockReservation_Item extends CommonDBChild {
                                          'is_template'   => 0,
                                          'entities_id'   => $entity,
                                          'locations_id'  => $location,
-                                         'states_id'     => $config->fields['transit_status']]);
+                                         'states_id'     => $config->fields['transit_status'] ?? '']);
    }
 
 
@@ -176,7 +176,7 @@ class PluginGeststockReservation_Item extends CommonDBChild {
       $rand = mt_rand();
 
       $ticket = new Ticket();
-      $ticket->getFromDB($resa->fields['tickets_id']);
+      $ticket->getFromDB($resa->fields['tickets_id'] ?? '');
       $canedit   = Session::haveRight(self::$rightname, CREATE);
       $canupdate = Session::haveRight(self::$rightname, UPDATE);
 
@@ -189,8 +189,8 @@ class PluginGeststockReservation_Item extends CommonDBChild {
       $number = count($result);
 
       if ($canedit
-          && ($resa->fields['status'] < PluginGeststockReservation::RECEIPT)
-          && !in_array($ticket->fields['status'], Ticket::getClosedStatusArray())) {
+          && ($resa->fields['status'] ?? '' < PluginGeststockReservation::RECEIPT)
+          && !in_array($ticket->fields['status'] ?? '', Ticket::getClosedStatusArray())) {
          echo "<div class='firstbloc'>";
          echo "<form name='reservation_item_form$rand' id='reservation_item_form$rand' method='post'
                 action='".Toolbox::getItemTypeFormURL(__CLASS__)."'>";
@@ -202,7 +202,7 @@ class PluginGeststockReservation_Item extends CommonDBChild {
          echo "<td>".__('Type')." <p> ".__('Model')."</p></td><td colspan='2'>";
          $config = new PluginGeststockConfig();
          $config->getFromDB(1);
-         $entity = $config->fields['entities_id_stock'];
+         $entity = $config->fields['entities_id_stock'] ?? '';
          PluginGeststockReservation::showAllItems("model", 0, 0, $entity);
          echo Html::submit(_sx('button', 'Add'), ['name'  => 'additem',
                                                   'class' => 'btn btn-primary']);
@@ -220,12 +220,12 @@ class PluginGeststockReservation_Item extends CommonDBChild {
       echo "<td class='green'>".
                sprintf(__('%1$s: %2$s'), "<b>".__('Entity')."</b>",
                        Dropdown::getDropdownName('glpi_entities',
-                                                 $resa->fields['entities_id_deliv']))."<br /> ".
+                                                 $resa->fields['entities_id_deliv'] ?? ''))."<br /> ".
                sprintf(__('%1$s: %2$s'), "<b>".__('Location')."</b>",
                        Dropdown::getDropdownName('glpi_locations',
-                                                  $resa->fields['locations_id']))." <br /> ".
+                                                  $resa->fields['locations_id'] ?? ''))." <br /> ".
                sprintf(__('%1$s: %2$s'), "<b>".__('Status')."</b>",
-                       PluginGeststockReservation::getStatusName($resa->fields['status']))."</td>";
+                       PluginGeststockReservation::getStatusName($resa->fields['status'] ?? ''))."</td>";
       echo "</td></tr>";
 
       echo "<td>".__('Ticket')."</td>";
@@ -250,10 +250,10 @@ class PluginGeststockReservation_Item extends CommonDBChild {
          echo "<td>Date Tova&nbsp;&nbsp;";
          echo Html::convDate($resa->fields["date_tova"]);
          echo "</td>";
-         echo "<td>Numéro de valise&nbsp;&nbsp;".$resa->fields['number_tova'];
+         echo "<td>Numéro de valise&nbsp;&nbsp;".$resa->fields['number_tova'] ?? '';
          echo "</td>";
          echo "<td>Type de valise&nbsp;&nbsp;";
-         echo PluginGeststockReservation::getStatusTova($resa->fields['type_tova']);
+         echo PluginGeststockReservation::getStatusTova($resa->fields['type_tova'] ?? '');
          echo "</td></tr>";
       }
 
@@ -265,11 +265,11 @@ class PluginGeststockReservation_Item extends CommonDBChild {
       $nbre = new PluginGeststockReservation_Item_Number();
       $display = $empty = false;
       foreach ($DB->request("glpi_plugin_geststock_reservations_items",
-            ['plugin_geststock_reservations_id' => $resa->fields['id']]) as $resait) {
+            ['plugin_geststock_reservations_id' => $resa->fields['id'] ?? '']) as $resait) {
                $resaitem = $resait['id'];
                if ($nbre->getFromDBByRequest(['WHERE' => ['plugin_geststock_reservations_items_id'
                                                             => $resaitem]])) {
-                  $num  = importArrayFromDB($nbre->fields['otherserial']);
+                  $num  = importArrayFromDB($nbre->fields['otherserial'] ?? '');
                   if (count($num) == $resait['nbrereserv']) {
                      $display = true;
                   } else {
@@ -281,17 +281,17 @@ class PluginGeststockReservation_Item extends CommonDBChild {
             }
       if (!$empty && $display
           && Session::haveRight(self::$rightname, PluginGeststockGestion::TRANSFERT)
-          && ($resa->fields['status'] < PluginGeststockReservation::RECEIPT)
-          && self::canTransfertItem($resa->fields['id'])) {
+          && ($resa->fields['status'] ?? '' < PluginGeststockReservation::RECEIPT)
+          && self::canTransfertItem($resa->fields['id'] ?? '')) {
           echo "<a class='vsubmit' href='".Toolbox::getItemTypeFormURL(__CLASS__)."?transfert=".
-                 $resa->fields['tickets_id']."'>";
+                 $resa->fields['tickets_id'] ?? ''."'>";
           echo __('Transfert items', 'geststock');
          echo "</a></div>";
       }
 
       $i = $volume = $weight = $totvolume = $totweight = $j = 0;
       echo "<div>";
-      if ($canupdate && ($resa->fields['status'] < PluginGeststockReservation::RECEIPT)) {
+      if ($canupdate && ($resa->fields['status'] ?? '' < PluginGeststockReservation::RECEIPT)) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
          $massiveactionparams = ['container' => 'mass'.__CLASS__.$rand];
          Html::showMassiveActions($massiveactionparams);
@@ -304,7 +304,7 @@ class PluginGeststockReservation_Item extends CommonDBChild {
       $header_bottom = '';
       $header_end    = '';
 
-      if ($canupdate && ($resa->fields['status'] < PluginGeststockReservation::RECEIPT)) {
+      if ($canupdate && ($resa->fields['status'] ?? '' < PluginGeststockReservation::RECEIPT)) {
          $header_top    .= "<th width='10'>".Html::getCheckAllAsCheckbox('mass'.__CLASS__.$rand);
          $header_top    .= "</th>";
          $header_bottom .= "<th width='10'>".Html::getCheckAllAsCheckbox('mass'.__CLASS__.$rand);
@@ -365,7 +365,7 @@ class PluginGeststockReservation_Item extends CommonDBChild {
                   echo "<tr ".$style.">";
 
                   if ($canupdate
-                      && ($resa->fields['status'] < PluginGeststockReservation::RECEIPT)) {
+                      && ($resa->fields['status'] ?? '' < PluginGeststockReservation::RECEIPT)) {
                      echo "<td width='10'>";
                      Html::showMassiveActionCheckBox(__CLASS__, $data["IDD"]);
                      echo "</td>";
@@ -382,17 +382,17 @@ class PluginGeststockReservation_Item extends CommonDBChild {
                     echo "<td class='center'>";
                     echo Dropdown::getDropdownName('glpi_locations',
                                                    isset($fup->fields['locations_id_old'])
-                                                         ? $fup->fields['locations_id_old']
+                                                         ? $fup->fields['locations_id_old'] ?? ''
                                                          : $data['locations_id_stock']);
                     echo "</td>";
 
                     echo "<td class='center'>";
                     $ticket = new Ticket();
-                    $ticket->getFromDB($resa->fields['tickets_id']);
+                    $ticket->getFromDB($resa->fields['tickets_id'] ?? '');
                     echo Dropdown::getDropdownName('glpi_locations',
                                                    isset($fup->fields['locations_id_new'])
-                                                         ? $fup->fields['locations_id_new']
-                                                         : $ticket->fields['locations_id']);
+                                                         ? $fup->fields['locations_id_new'] ?? ''
+                                                         : $ticket->fields['locations_id'] ?? '');
                     echo "</td>";
                   }
 
@@ -412,7 +412,7 @@ class PluginGeststockReservation_Item extends CommonDBChild {
                   echo "<td class='center'>".($volume > 0 ? $volume : "/")."</td>";
                   echo "<td class='center'>".($weight > 0 ? $weight : "/")."</td>";
                   if ($dbu->countElementsInTable('glpi_plugin_geststock_reservations_items',
-                                                 ['plugin_geststock_reservations_id' => $resa->fields['id']])
+                                                 ['plugin_geststock_reservations_id' => $resa->fields['id'] ?? ''])
                       == $j) {
                   echo "<td class='center'>".($totvolume > 0 ? $totvolume : "/")."</td>";
                   echo "<td class='center'>".($totweight > 0 ? $totweight : "/")."</td>";
@@ -423,11 +423,11 @@ class PluginGeststockReservation_Item extends CommonDBChild {
          }
       }
 
-      if ($number && ($resa->fields['status'] < PluginGeststockReservation::RECEIPT)) {
+      if ($number && ($resa->fields['status'] ?? '' < PluginGeststockReservation::RECEIPT)) {
          echo $header_begin.$header_bottom.$header_end;
       }
 
-      if ($canupdate && ($resa->fields['status'] < PluginGeststockReservation::RECEIPT)) {
+      if ($canupdate && ($resa->fields['status'] ?? '' < PluginGeststockReservation::RECEIPT)) {
          echo "<tr class='tab_bg_1'><td colspan='3' class='center'>";
          echo Html::hidden('users_id', ['value' => Session::getLoginUserID()]);
          echo Html::hidden('reservations_id', ['value' => $resa->getField('id')]);
@@ -443,8 +443,8 @@ class PluginGeststockReservation_Item extends CommonDBChild {
       Html::closeForm();
 
       $ticket = new Ticket();
-      $ticket->getFromDB($resa->fields['tickets_id']);
-      if (!in_array($ticket->fields['status'], Ticket::getClosedStatusArray())) {
+      $ticket->getFromDB($resa->fields['tickets_id'] ?? '');
+      if (!in_array($ticket->fields['status'] ?? '', Ticket::getClosedStatusArray())) {
          self::showItemToSend($resa);
       }
    }
@@ -456,7 +456,7 @@ class PluginGeststockReservation_Item extends CommonDBChild {
       $instID = $resa->getField('id');
 
       if (!$resa->can($instID, READ)
-          || ($resa->fields['status'] >= PluginGeststockReservation::RECEIPT)) {
+          || ($resa->fields['status'] ?? '' >= PluginGeststockReservation::RECEIPT)) {
          return false;
       }
       $rand = mt_rand();
@@ -472,7 +472,7 @@ class PluginGeststockReservation_Item extends CommonDBChild {
 
       $config = new PluginGeststockConfig();
       $config->getFromDB(1);
-      $entity = $config->fields['entities_id_stock'];
+      $entity = $config->fields['entities_id_stock'] ?? '';
       echo "<table class='tab_cadre_fixe'>";
       echo "<tr class='tab_bg_2'><th colspan='4'>";
       if ($canupdate) {
@@ -530,7 +530,7 @@ class PluginGeststockReservation_Item extends CommonDBChild {
                                         'is_deleted'    => 0]) as $data) {
             $item = new $itemtype();
             if ($item->getFromDB($data['id'])
-                && ($item->getField('states_id') == $config->fields['stock_status'])) {
+                && ($item->getField('states_id') == $config->fields['stock_status'] ?? '')) {
                $dispo[$data['id']]     = $data['id'];
             }
          }
@@ -573,7 +573,7 @@ class PluginGeststockReservation_Item extends CommonDBChild {
             echo "- ";
             foreach ($otherserial as $val) {
                $item->getFromDB($val);
-               $criterion = $config->fields['criterion'];
+               $criterion = $config->fields['criterion'] ?? '';
                echo $item->fields[$criterion]." - ";
             }
          }
@@ -611,7 +611,7 @@ class PluginGeststockReservation_Item extends CommonDBChild {
       $item   = new $itemtype();
       $config    = new PluginGeststockConfig();
       $config->getFromDB(1);
-      $criterion = $config->fields['criterion'];
+      $criterion = $config->fields['criterion'] ?? '';
       foreach ($options['dispo'] as $field => $val) {
          $item->getFromDB($field);
          $params[$val] = $item->fields[$criterion];
@@ -726,7 +726,7 @@ class PluginGeststockReservation_Item extends CommonDBChild {
 
       if (!empty($status)) {
          $resa = new PluginGeststockReservation();
-         $resa->update(['id'     => $this->fields['plugin_geststock_reservations_id'],
+         $resa->update(['id'     => $this->fields['plugin_geststock_reservations_id'] ?? '',
                         'status' => $status]);
       }
 
@@ -741,18 +741,18 @@ class PluginGeststockReservation_Item extends CommonDBChild {
       $config  = new PluginGeststockConfig();
       $config->getFromDB(1);
       foreach ($DB->request('glpi_plugin_geststock_reservations_items_numbers',
-                            ['plugin_geststock_reservations_items_id' => $this->fields['id']]) as $rin) {
+                            ['plugin_geststock_reservations_items_id' => $this->fields['id'] ?? '']) as $rin) {
          // delete otherserial
          $nbre->delete(['id' => $rin['id']]);
 
          //update status of item
-         $item = new $this->fields['itemtype']();
+         $item = new $this->fields['itemtype'] ?? ''();
          $otherserial = importArrayFromDB($rin['otherserial']);
          foreach ($otherserial as $serial => $val) {
             if ($item->getFromDB($val)) {
                // change status of item
                $item->update(['id'            => $val,
-                              'states_id'     => $config->fields['stock_status']]);
+                              'states_id'     => $config->fields['stock_status'] ?? '']);
             }
          }
       }
@@ -777,7 +777,7 @@ class PluginGeststockReservation_Item extends CommonDBChild {
          case 'moveactual' :
             $config = new PluginGeststockConfig();
             $config->getFromDB(1);
-            $entity = $config->fields['entities_id_stock'];
+            $entity = $config->fields['entities_id_stock'] ?? '';
             Location::dropdown(['entity'   => $entity,
                                 'addicon'  => false,
                                 'comments' => false]);
@@ -857,7 +857,7 @@ class PluginGeststockReservation_Item extends CommonDBChild {
    static function pdfForReservation(PluginPdfSimplePDF $pdf, PluginGeststockReservation $resa) {
       global $DB, $CFG_GLPI;
 
-      $instID = $resa->fields['id'];
+      $instID = $resa->fields['id'] ?? '';
 
       $dbu = new DbUtils();
 
@@ -934,7 +934,7 @@ class PluginGeststockReservation_Item extends CommonDBChild {
                                             'WHERE'  => ['plugin_geststock_reservations_items_id'
                                                          => $data["IDD"]]]) as $val) {
                         $fup->getFromDB($val['MAX(`id`)']);
-                        $newlocation = $fup->fields['locations_id_new'];
+                        $newlocation = $fup->fields['locations_id_new'] ?? '';
                      }
                      $nbre = '';
                      foreach ($DB->request("glpi_plugin_geststock_reservations_items_numbers",
