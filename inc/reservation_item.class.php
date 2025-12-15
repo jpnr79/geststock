@@ -146,7 +146,7 @@ class PluginGeststockReservation_Item extends CommonDBChild {
    }
 
 
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0): bool {
 
       if ($item->getType() == 'PluginGeststockReservation') {
          self::showForItem($item);

@@ -52,7 +52,7 @@ class PluginGeststockProfile extends Profile {
    }
 
 
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   public static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0): bool {
 
       if ($item->getType()=='Profile') {
          $ID = $item->getID();
