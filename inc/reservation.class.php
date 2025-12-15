@@ -632,7 +632,7 @@ class PluginGeststockReservation extends CommonDBTM {
         echo "&nbsp;\n";
       }
       Ajax::updateItemOnSelectEvent($field_id, "show_$myname$rand",
-                                    Plugin::getWebDir('geststock')."/ajax/dropdownAllItems.php",
+                                    '/plugins/geststock/ajax/dropdownAllItems.php',
                                     $params);
       echo "</span>";
 
@@ -673,7 +673,7 @@ class PluginGeststockReservation extends CommonDBTM {
          echo "&nbsp;\n";
       }
       Ajax::updateItemOnSelectEvent($field_id, "show_$mynamel$rand",
-                                    Plugin::getWebDir('geststock')."/ajax/dropdownLocations.php",
+                                    '/plugins/geststock/ajax/dropdownLocations.php',
                                     $params);
       echo "</span>\n";
 
@@ -688,7 +688,7 @@ class PluginGeststockReservation extends CommonDBTM {
          echo "&nbsp;\n";
       }
       Ajax::updateItemOnSelectEvent($field_id, "show_$mynamet$rand",
-                                    Plugin::getWebDir('geststock')."/ajax/dropdownTickets.php",
+                                    '/plugins/geststock/ajax/dropdownTickets.php',
                                     $params2);
       echo "</span>";
 
@@ -762,7 +762,7 @@ class PluginGeststockReservation extends CommonDBTM {
         echo "&nbsp;\n";
       }
       Ajax::updateItemOnSelectEvent($field_id, "show_number$rand",
-                                    Plugin::getWebDir('geststock')."/ajax/dropdownNumber.php",
+                                    '/plugins/geststock/ajax/dropdownNumber.php',
                                     $params);
       echo "</span>";
    }

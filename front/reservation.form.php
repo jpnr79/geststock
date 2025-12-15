@@ -101,7 +101,7 @@ if (isset($_POST["add"])) {
 } else if (isset($_POST["delete"])) {
    $PluginReservation->check($_POST['id'], DELETE);
    $PluginReservation->delete($_POST);
-   Html::redirect(Plugin::getWebDir('geststock')."/front/reservation.php");
+   Html::redirect('/plugins/geststock/front/reservation.php');
 
 } else if (isset($_POST["restore"])) {
    $PluginReservation->check($_POST['id'], PURGE);
@@ -114,7 +114,7 @@ if (isset($_POST["add"])) {
       Event::log($_POST["id"], "plugingeststockreservation", 4, "tools",
                  sprintf(__('%s purges an item'), $_SESSION["glpiname"]));
    }
-   Html::redirect(Plugin::getWebDir('geststock')."/front/reservation.php");
+   Html::redirect('/plugins/geststock/front/reservation.php');
 
 } else {
    Html::header(PluginGeststockReservation::getTypeName(1), '', "tools", "plugingeststockmenu");
