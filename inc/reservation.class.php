@@ -159,8 +159,8 @@ class PluginGeststockReservation extends CommonDBTM {
       }
 
       if ((PluginGeststockConfig::TOVA == 1)
-          && (isset($input['date_tova']) && ($this->fields['date_tova'] ?? '' != $input['date_tova']))
-          && isset($this->fields['date_whished']) && ($this->fields['date_whished'] ?? '' > $date)) {
+          && (isset($input['date_tova']) && (($this->fields['date_tova'] ?? '') != $input['date_tova']))
+          && isset($this->fields['date_whished']) && (($this->fields['date_whished'] ?? '') > $date)) {
          $input['date_whished'] = $input['date_tova'];
       }
 
@@ -294,9 +294,9 @@ class PluginGeststockReservation extends CommonDBTM {
          echo "</td><td colspan='3' class='top'>";
          $config = new PluginGeststockConfig();
          $config->getFromDB(1);
-         $entity = $config->fields['entities_id_stock'] ?? '';
-         $number = isset($this->fields['_nbrereserv']) ? $this->fields['_nbrereserv'] ?? '' : [];
-         self::showAllItems("_model", $this->fields['_itemtype'] ?? '', $this->fields['_model'] ?? '',
+         $entity = ($config->fields['entities_id_stock'] ?? '');
+         $number = isset($this->fields['_nbrereserv']) ? ($this->fields['_nbrereserv'] ?? '') : [];
+         self::showAllItems("_model", ($this->fields['_itemtype'] ?? ''), ($this->fields['_model'] ?? ''),
                             $entity, $number);
          echo "</td></tr>";
       }
@@ -308,22 +308,22 @@ class PluginGeststockReservation extends CommonDBTM {
          $ticket->getFromDB($options['tickets_id']);
          echo "<td>".__('Delivery entity', 'geststock')."</td>";
          echo "<td colspan='3' class='top'>".
-         Dropdown::getDropdownName('glpi_entities', $ticket->fields['entities_id'] ?? '');
+         Dropdown::getDropdownName('glpi_entities', ($ticket->fields['entities_id'] ?? ''));
          echo "</td></tr>";
 
          echo "<tr class='tab_bg_1'>";
          echo "<td>".__('Delivery location', 'geststock')."</td><td colspan='3'>";
-         Location::dropdown(['entity'   => $ticket->fields['entities_id'] ?? '',
+         Location::dropdown(['entity'   => ($ticket->fields['entities_id'] ?? ''),
                              'value'    => isset($ticket->fields['locations_id'])
-                                                       ? $ticket->fields['locations_id'] ?? '' : '',
+                                                       ? ($ticket->fields['locations_id'] ?? '') : '',
                              'addicon'  => false,
                              'comments' => false]);
          echo "</td></tr>";
 
          echo "<tr class='tab_bg_1'>";
          echo "<td>".__('Ticket')."</td>";
-         echo "<td colspan='3'>".Dropdown::getDropdownName('glpi_tickets', $ticket->fields['id'] ?? '');
-         echo Html::hidden('entities_id_deliv', ['value' => $ticket->fields['entities_id'] ?? '']);
+         echo "<td colspan='3'>".Dropdown::getDropdownName('glpi_tickets', ($ticket->fields['id'] ?? ''));
+         echo Html::hidden('entities_id_deliv', ['value' => ($ticket->fields['entities_id'] ?? '')]);
          echo Html::hidden('tickets_id', ['value' => $options['tickets_id']]);
          echo Html::hidden('_fromticket', ['value' => 1]);
 
@@ -331,8 +331,8 @@ class PluginGeststockReservation extends CommonDBTM {
          echo "<tr class='tab_bg_1'>";
          echo "<td>".__('Delivery entity', 'geststock')." <p> ".__('Delivery location', 'geststock').
                "</p><p> ".__('Ticket')."</td><td colspan='3' class='top'>";
-         self::showAllEntities("locations_id", "tickets_id", $this->fields['entities_id_deliv'] ?? '',
-                               $this->fields['locations_id'] ?? '', $this->fields['tickets_id'] ?? '');
+         self::showAllEntities("locations_id", "tickets_id", ($this->fields['entities_id_deliv'] ?? ''),
+                               ($this->fields['locations_id'] ?? ''), ($this->fields['tickets_id'] ?? ''));
       }
       echo "</td></tr>";
 
@@ -348,10 +348,10 @@ class PluginGeststockReservation extends CommonDBTM {
       if (Session::haveRight(self::$rightname, PluginGeststockGestion::GESTION)
           && $ID) {
          $params = self::getAllStatusArray();
-         $params['value'] = $this->fields['status'] ?? '';
+         $params['value'] = ($this->fields['status'] ?? '');
          self::dropdownStatus('status',$params);
       } else {
-         echo self::getStatusName($ID ? $this->fields['status'] ?? '':self::ASKED);
+         echo self::getStatusName($ID ? ($this->fields['status'] ?? ''):self::ASKED);
       }
       echo "</td></tr>";
 
@@ -372,8 +372,8 @@ class PluginGeststockReservation extends CommonDBTM {
          echo "<tr class='tab_bg_1'>";
          echo "<td>Type de valise</td><td>";
          $params                        = self::getAllStatusTova();
-         $params['value']               = !empty($this->fields['type_tova'] ?? '')
-                                          ? $this->fields['type_tova'] ?? '' : self::SECFREIGHT;
+         $params['value']               = !empty(($this->fields['type_tova'] ?? ''))
+                                          ? ($this->fields['type_tova'] ?? '') : self::SECFREIGHT;
          $params['tova']                = true;
          $params['display_emptychoice'] = true;
          self::dropdownStatus('type_tova', $params);
@@ -394,14 +394,14 @@ class PluginGeststockReservation extends CommonDBTM {
                       'rows'            => '5',
                       'style'           => 'width:95%']);
       echo "</textarea>";
-      if (empty($this->fields['date_reserv'] ?? '')) {
+      if (empty(($this->fields['date_reserv'] ?? ''))) {
          echo Html::hidden('date_reserv', ['value' => $_SESSION["glpi_currenttime"]]);
       }
       echo "</td></tr>\n";
 
       if (($this->fields['status'] == PluginGeststockReservation::RECEIPT)
           || (isset($ticket->fields['status'])
-              && in_array($ticket->fields['status'] ?? '', Ticket::getClosedStatusArray()))) {
+              && in_array(($ticket->fields['status'] ?? ''), Ticket::getClosedStatusArray()))) {
          $options['candel']  = false;
          $options['canedit'] = false;
       }
@@ -751,7 +751,7 @@ class PluginGeststockReservation extends CommonDBTM {
       echo "<span id='show_number$rand' style='spacing:5px'>\n";
       $config = new PluginGeststockConfig();
       $config->getFromDB(1);
-      $entity = $config->fields['entities_id_stock'] ?? '';
+      $entity = ($config->fields['entities_id_stock'] ?? '');
       $params = ['itemtype'    => $itemtype,
                  'model'       => '__VALUE__',
                  'entity'      => $entity];
@@ -774,7 +774,7 @@ class PluginGeststockReservation extends CommonDBTM {
       $nb     = 0;
       $config = new PluginGeststockConfig();
       $config->getFromDB(1);
-      $entity = $config->fields['entities_id_stock'] ?? '';
+      $entity = ($config->fields['entities_id_stock'] ?? '');
 
       echo "<table><tr>";
       $find = false;
@@ -976,7 +976,7 @@ class PluginGeststockReservation extends CommonDBTM {
                                            'is_deleted' => 1]);
       if (Session::haveRight(self::$rightname, READ)) {
          if (Session::haveRight(self::$rightname, CREATE)
-             && ($ticket->fields['type'] ?? '' != Ticket::DEMAND_TYPE)) {
+             && (($ticket->fields['type'] ?? '') != Ticket::DEMAND_TYPE)) {
              echo "<p><font class='red b'>".__("can't create a ticket for ticket type incident",
                                                'geststock')."</font></p>";
              exit;
@@ -994,7 +994,7 @@ class PluginGeststockReservation extends CommonDBTM {
 
             echo "<tr class='tab_bg_2 center'><td>";
             echo Html::hidden('tickets_id', ['value' => $ID]);
-            echo Html::hidden('entities_id', ['value' => $ticket->fields['entities_id'] ?? '']);
+            echo Html::hidden('entities_id', ['value' => ($ticket->fields['entities_id'] ?? '')]);
             if (Session::haveRight(self::$rightname, CREATE)) {
                echo "<a href='".Toolbox::getItemTypeFormURL(__CLASS__)."?tickets_id=$ID'>";
                echo __('Create a reservation from this ticket', 'geststock');
@@ -1077,7 +1077,7 @@ class PluginGeststockReservation extends CommonDBTM {
    function show_PDF($pdf) {
 
       $pdf->setColumnsSize(50,50);
-      $col1 = '<b>'.sprintf(__('%1$s %2$s'), __('ID'), $this->fields['id'] ?? '').'</b>';
+      $col1 = '<b>'.sprintf(__('%1$s %2$s'), __('ID'), ($this->fields['id'] ?? '')).'</b>';
       if (isset($this->fields["date_mod"])) {
          $col2 = sprintf(__('%1$s: %2$s'), __('Last update'),
                          Html::convDateTime($this->fields["date_mod"]));
@@ -1089,37 +1089,37 @@ class PluginGeststockReservation extends CommonDBTM {
       $pdf->setColumnsSize(100);
       $pdf->displayLine(sprintf(__('%1$s: %2$s'), '<b><i>'.__('Delivery entity', 'geststock').'</i></b>',
                                 Dropdown::getDropdownName('glpi_entities',
-                                                          $this->fields['entities_id_deliv'] ?? '')));
+                                                          ($this->fields['entities_id_deliv'] ?? ''))));
 
       $pdf->displayLine(sprintf(__('%1$s: %2$s'), '<b><i>'.__('Delivery location', 'geststock').'</i></b>',
                                 Dropdown::getDropdownName('glpi_locations',
-                                                          $this->fields['locations_id'] ?? '')));
+                                                          ($this->fields['locations_id'] ?? ''))));
 
       $pdf->setColumnsSize(50,50);
       $pdf->displayLine(sprintf(__('%1$s: %2$s'), '<b><i>'.__('Ticket').'</i></b>',
                                 Toolbox::stripTags(Dropdown::getDropdownName('glpi_tickets',
-                                                                             $this->fields['tickets_id'] ?? ''))),
+                                                                             ($this->fields['tickets_id'] ?? '')))),
                         sprintf(__('%1$s: %2$s'), '<b><i>'.__('Status').'</i></b>',
-                                Toolbox::stripTags(self::getStatusName($this->fields['status'] ?? ''))));
+                                Toolbox::stripTags(self::getStatusName(($this->fields['status'] ?? '')))));
 
       $pdf->displayLine(sprintf(__('%1$s: %2$s'), '<b><i>'.__('Delivery date', 'geststock').'</i></b>',
-                                Html::convDateTime($this->fields['date_whished'] ?? '')),
+                                Html::convDateTime(($this->fields['date_whished'] ?? ''))),
                         sprintf(__('%1$s: %2$s'), '<b><i>'.__('Receipt date', 'geststock').'</i></b>',
-                                Html::convDateTime($this->fields['receipt_date'] ?? '')));
+                                Html::convDateTime(($this->fields['receipt_date'] ?? ''))));
 
       if (PluginGeststockConfig::TOVA == 1) {
          $pdf->setColumnsSize(30,30,40);
          $pdf->displayLine(sprintf(__('%1$s: %2$s'), '<b><i>Date Tova </i></b>',
-                                   Html::convDateTime($this->fields['date_tova'] ?? '')),
+                                   Html::convDateTime(($this->fields['date_tova'] ?? ''))),
                            sprintf(__('%1$s: %2$s'), '<b><i>Numéro de valise </i></b>',
-                                   $this->fields['number_tova'] ?? ''),
+                                   ($this->fields['number_tova'] ?? '')),
                            sprintf(__('%1$s: %2$s'), '<b><i>Type de valise </i></b>',
-                                    Toolbox::stripTags(self::getStatusTova($this->fields['type_tova'] ?? ''))));
+                                    Toolbox::stripTags(self::getStatusTova(($this->fields['type_tova'] ?? '')))));
       }
 
       $pdf->setColumnsSize(100);
       $pdf->displayText(sprintf(__('%1$s: %2$s'), '<b><i>'.__('Comments').'</i></b>',
-                                $this->fields['comment'] ?? ''));
+                                ($this->fields['comment'] ?? '')));
 
       $pdf->displaySpace();
    }
@@ -1147,14 +1147,14 @@ class PluginGeststockReservation extends CommonDBTM {
                foreach ($otherserial as $serial => $val) {
                   if ($item->getFromDB($val)) {
                      //Teste si l'élément est bien en transit (c'est à dire non modifié manuellement) JMC
-                     if ($item->getField('states_id') == $config->fields['transit_status'] ?? '') {
+                     if ($item->getField('states_id') == ($config->fields['transit_status'] ?? '')) {
                         // move item to new entity
                         $item->update(['id'            => $val,
                                        'entities_id'   => $resa['entities_id_deliv'],
                                        'locations_id'  => $resa['locations_id'],
-                                       'states_id'     => $config->fields['stock_status'] ?? '']);
+                                       'states_id'     => ($config->fields['stock_status'] ?? '')]);
                      }
-                     $listexport[] = $item->getField($config->fields['criterion'] ?? '');
+                     $listexport[] = $item->getField(($config->fields['criterion'] ?? ''));
                   } else {
                      break;
                   }
@@ -1168,7 +1168,7 @@ class PluginGeststockReservation extends CommonDBTM {
          if ($reservation->getFromDB($resa['id'])) {
             $reservation->update(['id'            => $resa['id'],
                                   'receipt_date'  => $_SESSION["glpi_currenttime"],
-                                  'status'        => $config->fields['transit_status'] ?? '']);
+                                  'status'        => ($config->fields['transit_status'] ?? '')]);
          }
 
          $fup = new ITILFollowup();

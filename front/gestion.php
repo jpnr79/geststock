@@ -35,7 +35,7 @@ Html::header(PluginGeststockGestion::getTypeName(1), '', "tools", "plugingeststo
 if (Session::haveRight("plugin_geststock", PluginGeststockGestion::GESTION)) {
    $config = new PluginGeststockConfig();
    $config->getFromDB(1);
-   $entity = $config->fields['entities_id_stock'] ?? '';
+   $entity = ($config->fields['entities_id_stock'] ?? '');
 
    if (isset($_GET["generate"])) {
       PluginGeststockGestion::GenerateReport($entity);

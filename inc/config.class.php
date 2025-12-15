@@ -103,7 +103,7 @@ class PluginGeststockConfig extends CommonDBTM {
       echo "<td>".__('Entity of stock', 'geststock')."</td><td width='70%'>";
       Entity::dropdown(['name'     => 'entities_id_stock',
                         'value'    => isset($config->fields['entities_id_stock'])
-                                            ? $config->fields['entities_id_stock'] ?? '' : '',
+                                            ? ($config->fields['entities_id_stock'] ?? '') : '',
                         'addicon'  => false,
                         'comments' => false]);
       echo "</td></tr>\n";
@@ -112,7 +112,7 @@ class PluginGeststockConfig extends CommonDBTM {
       echo "<td>".__('Status of item in stock', 'geststock')."</td><td width='70%'>";
       State::dropdown(['name'     => 'stock_status',
                        'value'    => isset($config->fields['stock_status'])
-                                           ? $config->fields['stock_status'] ?? '' : '',
+                                           ? ($config->fields['stock_status'] ?? '') : '',
                        'addicon'  => false,
                        'comments' => false]);
       echo "</td></tr>\n";
@@ -121,7 +121,7 @@ class PluginGeststockConfig extends CommonDBTM {
       echo "<td>".__('status of item in transit', 'geststock')."</td><td width='70%'>";
       State::dropdown(['name'     => 'transit_status',
                        'value'    => isset($config->fields['transit_status'])
-                                           ? $config->fields['transit_status'] ?? '' : '',
+                                           ? ($config->fields['transit_status'] ?? '') : '',
                        'addicon'  => false,
                        'comments' => false]);
       echo "</td></tr>\n";
@@ -132,7 +132,7 @@ class PluginGeststockConfig extends CommonDBTM {
       $crit['otherserial']  = __('Inventory number');
       Dropdown::showFromArray('criterion', $crit,
                               ['value' => isset($config->fields['criterion'])
-                                                ? $config->fields['criterion'] ?? '' : '']);
+                                                ? ($config->fields['criterion'] ?? '') : '']);
       echo "</td></tr>\n";
 
       echo "<tr class='tab_bg_1'><td class='center' colspan='2'>";

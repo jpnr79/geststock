@@ -68,9 +68,9 @@ if (isset($_POST["upload"])) {
 
             $tabid   = [];
             $ri->getFromDB($name);
-            $item    = new $ri->fields['itemtype'] ?? ''();
+            $item    = new ($ri->fields['itemtype'] ?? '')();
             $table   = $item->getTable();
-            $itemsid = strtolower($ri->fields['itemtype'] ?? '')."models_id";
+            $itemsid = strtolower(($ri->fields['itemtype'] ?? ''))."models_id";
 
             while ($itemfic = fgetcsv($fic, 1024, ';')) {
                $value   = $field   = '';
@@ -85,14 +85,14 @@ if (isset($_POST["upload"])) {
                if (!empty($value)) {
                   $req = $DB->request($table,
                                       [$field        => $value,
-                                       'entities_id' => $config->fields['entities_id_stock'] ?? '',
-                                       $itemsid      => $ri->fields['models_id'] ?? '']);
+                                       'entities_id' => ($config->fields['entities_id_stock'] ?? ''),
+                                       $itemsid      => ($ri->fields['models_id'] ?? '')]);
                   $find = false;
                   foreach ($req as $data) {
                      $find = true;
                      // stock id of item
                       if ($item->getFromDB($data['id'])
-                          && ($item->getField('states_id') == $config->fields['stock_status'] ?? '')) {
+                          && ($item->getField('states_id') == ($config->fields['stock_status'] ?? ''))) {
                          $tabid[] = $data['id'];
                       } else {
                          Session::addMessageAfterRedirect(__('The item with this number is not free',
@@ -108,19 +108,19 @@ if (isset($_POST["upload"])) {
             }
             fclose($fic);
             // controle item dans fichier et item réservés
-            if (count($tabid) == $ri->fields['nbrereserv'] ?? '') {
+            if (count($tabid) == ($ri->fields['nbrereserv'] ?? '')) {
                // ajout dans table des numeros
-               $input = ['plugin_geststock_reservations_items_id' => $ri->fields['id'] ?? '',
-                         'itemtype'                               => $ri->fields['itemtype'] ?? '',
-                         'models_id'                              => $ri->fields['models_id'] ?? '',
-                         'locations_id_stock'                     => $ri->fields['locations_id_stock'] ?? '',
+               $input = ['plugin_geststock_reservations_items_id' => ($ri->fields['id'] ?? ''),
+                         'itemtype'                               => ($ri->fields['itemtype'] ?? ''),
+                         'models_id'                              => ($ri->fields['models_id'] ?? ''),
+                         'locations_id_stock'                     => ($ri->fields['locations_id_stock'] ?? ''),
                          'otherserial'                            => $tabid,
                          'users_id'                               => Session::getLoginUserID()];
                $newID = $nbre->add($input);
                // change status of item
                foreach ($tabid as $id) {
                   $item->update(['id'        => $id,
-                                 'states_id' => $config->fields['transit_status'] ?? '']);
+                                 'states_id' => ($config->fields['transit_status'] ?? '')]);
                }
 
             } else {
@@ -141,14 +141,14 @@ if (isset($_POST["upload"])) {
       // not in post, so deleted
       if (!isset($_POST['itemtype'][$resaitem])) {
          if ($nbre->getFromDBByRequest(['WHERE' => ['plugin_geststock_reservations_items_id' => $resaitem]])) {
-            $num  = importArrayFromDB($nbre->fields['otherserial'] ?? '');
-            $type = $nbre->fields['itemtype'] ?? '';
+            $num  = importArrayFromDB(($nbre->fields['otherserial'] ?? ''));
+            $type = ($nbre->fields['itemtype'] ?? '');
             $item = new $type();
             // item back to Disponible
             foreach ($num as $id => $itemid) {
                if ($item->getFromDB($itemid)) {
                   $item->update(['id'            => $itemid,
-                                 'states_id'     => $config->fields['stock_status'] ?? '']);
+                                 'states_id'     => ($config->fields['stock_status'] ?? '')]);
                }
             }
             // delete itemnumber in database
@@ -173,7 +173,7 @@ if (isset($_POST["upload"])) {
                         $newID = $nbre->add($input);
                      } else  {
                         $nbre->getFromDB($nbre->getID());
-                        $num = importArrayFromDB($nbre->fields['otherserial'] ?? '');
+                        $num = importArrayFromDB(($nbre->fields['otherserial'] ?? ''));
                         $nbre->update(['id'            => $nbre->getID(),
                                        'otherserial'   => $data,
                                        'users_id'      => Session::getLoginUserID()]);
@@ -183,7 +183,7 @@ if (isset($_POST["upload"])) {
                            if (!in_array($itemid, $data)
                                && $item->getFromDB($itemid)) {
                               $item->update(['id'            => $itemid,
-                                             'states_id'     => $config->fields['stock_status'] ?? '']);
+                                             'states_id'     => ($config->fields['stock_status'] ?? '')]);
                            }
                         }
                      }
@@ -192,7 +192,7 @@ if (isset($_POST["upload"])) {
                         if (!in_array($itemid, $num)
                             && $item->getFromDB($itemid)) {
                            $item->update(['id'            => $itemid,
-                                          'states_id'     => $config->fields['transit_status'] ?? '']);
+                                          'states_id'     => ($config->fields['transit_status'] ?? '')]);
                         }
                      }
                   } else {

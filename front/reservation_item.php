@@ -43,7 +43,7 @@ if  (isset($_GET["generate"])) {
 
       $tablmodel = "glpi_".strtolower($data['itemtype'])."models";
 
-      $text .= "ticket = ".$resa->fields['tickets_id'] ?? ''."\t";
+      $text .= "ticket = ".($resa->fields['tickets_id'] ?? '')."\t";
       $text .= "nombre = ".$data['nbrereserv']."\t";
       $item = new $data['itemtype']();
       $text .= "type = ".$item->getTypeName()."\t";

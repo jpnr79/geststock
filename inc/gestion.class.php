@@ -129,8 +129,8 @@ class PluginGeststockGestion extends CommonDBTM {
                                               'is_template'  => 0,
                                               'entities_id'  => $entity,
                                               'locations_id' => $location['id'],
-                                              'states_id'    => [$config->fields['stock_status'] ?? '',
-                                                                 $config->fields['transit_status'] ?? '']]);
+                                              'states_id'    => [($config->fields['stock_status'] ?? ''),
+                                                                 ($config->fields['transit_status'] ?? '')]]);
             $totnb += $nb;
             if ($nb > 0) {
                if ($head) {
@@ -198,8 +198,8 @@ class PluginGeststockGestion extends CommonDBTM {
                                                  'is_template' => 0,
                                                  'entities_id' => $entity,
                                                  $modelid      => $model['id'],
-                                                 'states_id'   => [$config->fields['stock_status'] ?? '',
-                                                                   $config->fields['transit_status'] ?? '']]);
+                                                 'states_id'   => [($config->fields['stock_status'] ?? ''),
+                                                                   ($config->fields['transit_status'] ?? '')]]);
 
                if ($nb > 0) {
                   $code = strtolower(substr(strrchr(Dropdown::getDropdownName($tablmodel, $model['id']),

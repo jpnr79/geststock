@@ -81,7 +81,7 @@ class PluginGeststockSpecification extends CommonDBTM {
                action='".Toolbox::getItemTypeFormURL(__CLASS__)."'>";
        echo "<table class='tab_cadre_fixe'>";
        foreach ($DB->request('glpi_plugin_geststock_specifications',
-                             ['models_id' => $item->fields['id'] ?? '',
+                             ['models_id' => ($item->fields['id'] ?? ''),
                               'itemtype'  => $type]) as $data) {
        }
        echo "<tr class='tab_bg_1'>";
@@ -119,7 +119,7 @@ class PluginGeststockSpecification extends CommonDBTM {
        } else {
          echo Html::submit(_sx('button', 'Add'), ['name' => 'add',
                                                   'class' => 'btn btn-primary']);
-         echo Html::hidden('models_id',  ['value' => $item->fields['id'] ?? '']);
+         echo Html::hidden('models_id',  ['value' => ($item->fields['id'] ?? '')]);
          echo Html::hidden('itemtype', ['value' => $type]);
        }
        echo "</td></tr>";

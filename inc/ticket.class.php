@@ -72,21 +72,21 @@ class PluginGeststockTicket {
                   $resaitid = $resait['id'];
                   $count    = $resait['nbrereserv'];
                   if ($nbre->getFromDBByCrit(['plugin_geststock_reservations_items_id' => $resaitid])) {
-                     $num  = importArrayFromDB($nbre->fields['otherserial'] ?? '');
+                     $num  = importArrayFromDB(($nbre->fields['otherserial'] ?? ''));
                      if ($count <> count($num)) {
                         Session::addMessageAfterRedirect(__('Number selected different from number reserved',
                                                             'geststock'), false, ERROR);
-                        $ticket->input['status'] = $ticket->fields['status'] ?? '';
+                        $ticket->input['status'] = ($ticket->fields['status'] ?? '');
                      }
                   } else {
                      Session::addMessageAfterRedirect(__('Number selected different from number reserved',
                      'geststock'), false, ERROR);
-                     $ticket->input['status'] = $ticket->fields['status'] ?? '';
+                     $ticket->input['status'] = ($ticket->fields['status'] ?? '');
                   }
                }
             } else {
                Session::addMessageAfterRedirect(__('No number selected ', 'geststock'), false, ERROR);
-               $ticket->input['status'] = $ticket->fields['status'] ?? '';
+               $ticket->input['status'] = ($ticket->fields['status'] ?? '');
             }
          }
       }
